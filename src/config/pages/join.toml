@@ -1,0 +1,23 @@
+slug = "/join/"
+title = "加入我们"
+description = "填写报名信息，成为蓝旭工作室的一员。"
+
+[[sections]]
+type = "hero"
+id = "join-hero"
+eyebrow = "Join Bluemsun"
+title = "零基础可入门，持续学习可进阶"
+description = "欢迎对 Web 开发、算法竞赛、产品实践感兴趣的同学加入。"
+primaryText = "填写报名"
+primaryHref = "#join-form"
+secondaryText = "先看博客"
+secondaryHref = "/blog/"
+
+[[sections]]
+type = "joinForm"
+id = "join-form"
+title = "报名表单"
+description = "当前为表单组件占位，迁移时替换为真实收集渠道。"
+endpointEnv = "PUBLIC_JOIN_FORM_ENDPOINT"
+successMessage = "提交成功，我们会尽快联系你。"
+failureMessage = "提交失败，请稍后重试。"

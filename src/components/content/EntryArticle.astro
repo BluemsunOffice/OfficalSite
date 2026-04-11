@@ -1,0 +1,39 @@
+---
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+interface Props {
+  title: string;
+  date: Date;
+  author?: string;
+  tags?: string[];
+  stack?: string[];
+}
+
+const { title, date, author, tags = [], stack = [] } = Astro.props;
+---
+
+<SurfaceCard class="p-6 md:p-7">
+  <header class="mb-5 border-b border-brand-100 pb-4">
+    <h1 class="m-0 text-2xl font-bold text-ink-900">{title}</h1>
+    <p class="mono mt-2 text-sm text-ink-500">
+      {date.toLocaleDateString("zh-CN")}
+      {author ? ` · ${author}` : ""}
+    </p>
+    {stack.length > 0 && <p class="mt-2 text-sm text-ink-500">技术栈：{stack.join(" / ")}</p>}
+    {tags.length > 0 && (
+      <div class="mt-3 flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <a
+            href={`/blog/tags/${encodeURIComponent(tag)}/`}
+            class="mono rounded-full border border-brand-200 bg-brand-50 px-2.5 py-1 text-xs text-brand-600 transition hover:border-brand-300"
+          >
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )}
+  </header>
+  <div class="article-content">
+    <slot />
+  </div>
+</SurfaceCard>

@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eef5ff;
+  --color-brand-100: #dbeaff;
+  --color-brand-300: #7fb0ff;
+  --color-brand-500: #0a66f5;
+  --color-brand-700: #0949af;
+  --color-ink-900: #0f172a;
+  --color-ink-700: #334155;
+  --color-ink-500: #5b6b85;
+  --color-surface: #ffffff;
+  --color-bg: #f7faff;
+}
+
+@layer base {
+  html,
+  body {
+    @apply bg-bg text-ink-900 antialiased;
+  }
+
+  body {
+    font-family:
+      "Inter",
+      "PingFang SC",
+      "Hiragino Sans GB",
+      "Microsoft YaHei",
+      sans-serif;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+}
+
+@layer utilities {
+  .mono {
+    font-family:
+      "JetBrains Mono",
+      "Fira Code",
+      "SFMono-Regular",
+      Menlo,
+      Consolas,
+      monospace;
+  }
+
+  .container-shell {
+    width: min(1100px, 92%);
+    margin-inline: auto;
+  }
+
+  .section-shell {
+    @apply py-10 md:py-14;
+  }
+
+  .card-shell {
+    @apply rounded-2xl border border-brand-100 bg-surface shadow-[0_10px_30px_rgb(10_102_245/10%)];
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-brand-100/90 bg-white shadow-[0_10px_28px_rgb(10_102_245/10%)] transition duration-300;
+  }
+
+  .surface-card:hover {
+    @apply border-brand-300/80 shadow-[0_16px_40px_rgb(10_102_245/14%)];
+    transform: translateY(-2px);
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgb(10 102 245 / 8%) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(10 102 245 / 8%) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .article-content {
+    @apply text-[15px] leading-8 text-ink-700;
+  }
+
+  .article-content h1,
+  .article-content h2,
+  .article-content h3 {
+    @apply mt-8 mb-3 font-bold text-ink-900;
+  }
+
+  .article-content a {
+    @apply text-brand-500 underline-offset-4 hover:underline;
+  }
+
+  .article-content code {
+    @apply rounded bg-brand-50 px-1 py-0.5 text-sm;
+  }
+
+  .article-content pre {
+    @apply overflow-x-auto rounded-xl border border-brand-100 bg-white p-4;
+  }
+}

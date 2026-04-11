@@ -1,0 +1,32 @@
+slug = "/about/"
+title = "关于蓝旭"
+description = "了解蓝旭工作室的目标、节奏与协作方式。"
+
+[[sections]]
+type = "hero"
+id = "about-hero"
+eyebrow = "About Bluemsun"
+title = "一个面向实践的技术共同体"
+description = "我们相信，最好的学习来自真实任务、稳定协作和持续复盘。"
+primaryText = "查看博客"
+primaryHref = "/blog/"
+secondaryText = "查看项目"
+secondaryHref = "/projects/"
+
+[[sections]]
+type = "richText"
+id = "about-rich-text"
+title = "我们如何工作"
+content = """
+1. 通过项目驱动学习，而不是只停留在教程。
+2. 使用工程化流程，强调代码质量与文档规范。
+3. 定期技术分享，让输出反哺输入。
+"""
+
+[[sections]]
+type = "cta"
+id = "about-join"
+title = "一起做点有价值的事"
+description = "如果你愿意投入时间学习和协作，蓝旭欢迎你。"
+primaryText = "加入我们"
+primaryHref = "/join/"

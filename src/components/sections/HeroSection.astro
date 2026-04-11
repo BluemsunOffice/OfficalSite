@@ -1,0 +1,67 @@
+---
+import HeroBadgeStrip from "../motion/HeroBadgeStrip";
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  title: string;
+  description: string;
+  primaryText?: string;
+  primaryHref?: string;
+  secondaryText?: string;
+  secondaryHref?: string;
+  badges?: string[];
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  description,
+  primaryText,
+  primaryHref,
+  secondaryText,
+  secondaryHref,
+  badges = [],
+} = Astro.props;
+---
+
+<section id={id} class="section-shell grid-bg">
+  <SurfaceCard class="container-shell bg-linear-to-br from-white to-brand-50 p-8">
+    {eyebrow && (
+      <p class="mono mb-3 text-sm font-bold text-brand-500">
+        {eyebrow}
+      </p>
+    )}
+    <h1 class="m-0 text-[clamp(1.85rem,4vw,2.9rem)] leading-tight font-extrabold text-ink-900">
+      {title}
+    </h1>
+    <p class="mt-4 max-w-3xl text-ink-500 leading-7">
+      {description}
+    </p>
+
+    {(primaryText || secondaryText) && (
+      <div class="mt-5 flex flex-wrap gap-3">
+        {primaryText && primaryHref && (
+          <a
+            href={primaryHref}
+            class="rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
+          >
+            {primaryText}
+          </a>
+        )}
+        {secondaryText && secondaryHref && (
+          <a
+            href={secondaryHref}
+            class="rounded-lg border border-brand-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-700 transition hover:border-brand-400 hover:text-brand-500"
+          >
+            {secondaryText}
+          </a>
+        )}
+      </div>
+    )}
+
+    <HeroBadgeStrip client:idle badges={badges} />
+  </SurfaceCard>
+</section>

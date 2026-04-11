@@ -3,7 +3,7 @@ import PageComposer from "../components/composition/PageComposer.astro";
 import MainLayout from "../layouts/MainLayout.astro";
 import { getPageComposition } from "../lib/page-composition";
 
-const composition = await getPageComposition("home");
+const composition = await getPageComposition("join");
 ---
 
 <MainLayout title={composition.title} description={composition.description}>

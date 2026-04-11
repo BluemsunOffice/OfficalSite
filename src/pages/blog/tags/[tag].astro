@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import ContentIndexSection from "../../../components/content/ContentIndexSection.astro";
+import MainLayout from "../../../layouts/MainLayout.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection(
+    "blog",
+    ({ data }) => import.meta.env.DEV || !data.draft,
+  );
+  const tags = [...new Set(entries.flatMap((entry) => entry.data.tags))];
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      entries: entries
+        .filter((entry) => entry.data.tags.includes(tag))
+        .sort(
+          (a, b) =>
+            new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+        ),
+    },
+  }));
+}
+
+const { tag, entries } = Astro.props;
+---
+
+<MainLayout title={`标签: ${tag}`} description={`博客标签 ${tag}`}>
+  <ContentIndexSection
+    title={`标签：${tag}`}
+    description="该标签下的文章按时间倒序展示。"
+    eyebrow="BLOG TAG"
+    entries={entries}
+    emptyText="该标签下暂无内容。"
+    hrefPrefix="/blog/"
+  />
+</MainLayout>

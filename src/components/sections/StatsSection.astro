@@ -1,0 +1,36 @@
+---
+import SectionHeading from "../ui/SectionHeading.astro";
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+interface StatItem {
+  label: string;
+  value: string;
+  hint?: string;
+}
+
+interface Props {
+  id?: string;
+  title?: string;
+  description?: string;
+  items: StatItem[];
+}
+
+const { id, title, description, items } = Astro.props;
+---
+
+<section id={id} class="section-shell">
+  <div class="container-shell">
+    {(title || description) && (
+      <SectionHeading title={title ?? ""} description={description} />
+    )}
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((item) => (
+        <SurfaceCard class="p-5">
+          <p class="mono text-2xl font-bold tracking-tight text-brand-500">{item.value}</p>
+          <p class="mt-2 text-sm font-semibold text-ink-900">{item.label}</p>
+          {item.hint && <p class="mt-1 text-xs text-ink-500">{item.hint}</p>}
+        </SurfaceCard>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ContentCard from "../cards/ContentCard.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+type AnyEntry = CollectionEntry<"blog" | "news" | "projects">;
+
+interface Props {
+  id?: string;
+  title: string;
+  description?: string;
+  entries: AnyEntry[];
+  viewAllHref?: string;
+  viewAllText?: string;
+  emptyMessage?: string;
+}
+
+const { id, title, description, entries, viewAllHref, viewAllText, emptyMessage } = Astro.props;
+---
+
+<section id={id} class="section-shell">
+  <div class="container-shell">
+    <SectionHeading title={title} description={description} />
+    {
+      entries.length > 0 ? (
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
+          {entries.map((entry) => (
+            <ContentCard
+              href={`/${entry.collection}/${entry.id}/`}
+              title={entry.data.title}
+              description={entry.data.description}
+              date={entry.data.date}
+              meta={entry.data.author}
+            />
+          ))}
+        </div>
+      ) : (
+        <SurfaceCard class="m-0 p-4 text-ink-500">
+          {emptyMessage ?? "暂无内容。"}
+        </SurfaceCard>
+      )
+    }
+    {viewAllHref && viewAllText && (
+      <div class="mt-4">
+        <a
+          href={viewAllHref}
+          class="inline-flex rounded-lg border border-brand-200 bg-white px-3.5 py-2 text-sm font-semibold text-ink-700 transition hover:border-brand-400 hover:text-brand-500"
+        >
+          {viewAllText}
+        </a>
+      </div>
+    )}
+  </div>
+</section>

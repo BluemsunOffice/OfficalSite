@@ -1,0 +1,132 @@
+slug = "/"
+title = "蓝旭工作室"
+description = "蓝旭工作室是计算机系技术实践团队，连接教学、项目与工程能力建设。"
+
+[[sections]]
+type = "hero"
+id = "home-hero"
+eyebrow = "Bluemsun Studio"
+title = "连接课堂与真实交付的技术团队"
+description = "我们围绕校园数字化场景进行产品研发、工程协作与技术训练，让成员在真实项目中快速成长。"
+primaryText = "了解项目能力"
+primaryHref = "/projects/"
+secondaryText = "查看团队动态"
+secondaryHref = "/news/"
+badges = ["工程实践", "企业化交付", "技术分享", "竞赛成长"]
+
+[[sections]]
+type = "stats"
+id = "home-stats"
+title = "团队关键数据"
+description = "以持续输出验证团队工程能力与协作效率。"
+
+[[sections.items]]
+label = "在研/已交付项目"
+value = "10+"
+hint = "覆盖校园管理、活动服务、数据平台等方向"
+
+[[sections.items]]
+label = "技术分享与复盘"
+value = "40+"
+hint = "形成例行分享与项目复盘机制"
+
+[[sections.items]]
+label = "跨年级协作成员"
+value = "50+"
+hint = "建立稳定传帮带和角色协作链路"
+
+[[sections.items]]
+label = "竞赛与成果输出"
+value = "20+"
+hint = "开发、算法与科研方向协同推进"
+
+[[sections]]
+type = "featureGrid"
+id = "home-capabilities"
+title = "核心能力与服务"
+description = "覆盖从想法到上线的完整技术与组织能力。"
+
+[[sections.items]]
+title = "产品与研发流程"
+description = "从立项、原型到开发验收形成标准链路，保障节奏和质量。"
+icon = "workflow"
+
+[[sections.items]]
+title = "工程规范与评审"
+description = "统一代码规范、分支策略与评审机制，持续提升工程成熟度。"
+icon = "review"
+
+[[sections.items]]
+title = "人才培养体系"
+description = "围绕前端、后端、算法与产品建立分层培养路径，缩短上手周期。"
+icon = "growth"
+
+[[sections.items]]
+title = "运维与发布协同"
+description = "通过自动化构建、发布与监控流程，实现稳定交付和快速反馈。"
+icon = "deploy"
+
+[[sections]]
+type = "collectionPreview"
+id = "home-news"
+title = "团队动态"
+description = "发布工作室新闻、活动纪要与成果信息。"
+collection = "news"
+limit = 3
+homepageOnly = true
+emptyMessage = "新闻内容待迁移，完成后将自动展示。"
+viewAllHref = "/news/"
+viewAllText = "查看全部动态"
+
+[[sections]]
+type = "collectionPreview"
+id = "home-projects"
+title = "代表项目"
+description = "展示真实场景下的产品与工程实践。"
+collection = "projects"
+limit = 3
+homepageOnly = true
+emptyMessage = "项目内容待迁移，完成后将自动展示。"
+viewAllHref = "/projects/"
+viewAllText = "查看全部项目"
+
+[[sections]]
+type = "collectionPreview"
+id = "home-insight"
+title = "技术洞察"
+description = "精选技术文章与复盘内容，服务团队知识沉淀。"
+collection = "blog"
+limit = 2
+homepageOnly = true
+emptyMessage = "博客内容待迁移，完成后将自动展示。"
+viewAllHref = "/blog/"
+viewAllText = "查看全部文章"
+
+[[sections]]
+type = "gallery"
+id = "home-gallery"
+title = "照片墙"
+description = "以图像记录团队协作、开发场景与活动瞬间。"
+
+[[sections.items]]
+title = "编程马拉松"
+description = "阶段性冲刺开发与交付复盘。"
+image = "/images/gallery/hackathon.svg"
+
+[[sections.items]]
+title = "项目评审"
+description = "需求评审、代码审查与上线讨论。"
+image = "/images/gallery/review.svg"
+
+[[sections.items]]
+title = "团队活动"
+description = "多角色协作与跨方向交流。"
+image = "/images/gallery/team.svg"
+
+[[sections]]
+type = "cta"
+id = "home-join"
+title = "准备好加入我们了吗？"
+description = "如果你希望在真实项目中持续进阶，欢迎加入蓝旭工作室。"
+primaryText = "现在报名"
+primaryHref = "/join/"

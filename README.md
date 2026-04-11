@@ -1,43 +1,72 @@
-# Astro Starter Kit: Minimal
+# Bluemsun Site (Astro + Bun)
 
-```sh
-bun create astro@latest -- --template minimal
-```
+蓝旭官网使用 Astro + TOML 页面编排，日常维护入口固定为三类：
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+1. 全站配置：`src/config/site.ts`
+2. 页面编排：`src/config/pages/*.toml`
+3. 内容目录：`src/content/blog/**`（同理可维护 `news` / `projects`）
 
-## 🚀 Project Structure
+## 技术栈
 
-Inside of your Astro project, you'll see the following folders and files:
+- 包管理：`bun`
+- 框架：`astro`
+- 样式：`tailwindcss`（蓝白主题基线）
+- 动效：`react` + `motion`（局部 islands）
+- 配置解析：`smol-toml` + `zod`
+
+## 目录结构
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+  config/
+    site.ts
+    pages/*.toml
+  content/
+    blog/
+    news/
+    projects/
+  components/
+    composition/PageComposer.astro
+    motion/*.tsx
+    sections/*.astro
+  lib/
+    page-composition.ts
+    collections.ts
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 页面编排亮点
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- TOML section 组合渲染
+- 支持 `gallery` 照片墙 section
+- `collectionPreview` 支持首页筛选：`homepageOnly = true`
 
-Any static assets, like images, can be placed in the `public/` directory.
+## 内容字段（新增）
 
-## 🧞 Commands
+在 `src/content.config.ts` 中，`blog/news/projects` 统一支持：
 
-All commands are run from the root of the project, from a terminal:
+- `homepage: boolean`：是否出现在首页聚合区
+- `sticky: number`：首页聚合优先级（越小越靠前）
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
+排序规则：`sticky` 升序 -> `date` 降序。
 
-## 👀 Want to learn more?
+## 性能策略
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- 首屏保持 Astro 静态渲染
+- 动效组件采用局部 hydration（`client:idle` / `client:visible`）
+- 照片墙图片默认懒加载（`loading="lazy"`）
+- 建议将图片压缩后放入 `public/images/`
+
+## 开发命令
+
+```bash
+bun install
+bun run dev
+bun run check
+bun run build
+```
+
+## 迁移文档
+
+- 页面编排：`docs/page-composition.md`
+- 内容迁移：`docs/content-migration.md`
+- 资源迁移：`docs/asset-migration.md`

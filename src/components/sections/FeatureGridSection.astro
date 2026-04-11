@@ -1,0 +1,40 @@
+---
+import SectionHeading from "../ui/SectionHeading.astro";
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+interface FeatureItem {
+  title: string;
+  description: string;
+  icon?: string;
+}
+
+interface Props {
+  id?: string;
+  title: string;
+  description?: string;
+  items: FeatureItem[];
+}
+
+const { id, title, description, items } = Astro.props;
+---
+
+<section id={id} class="section-shell">
+  <div class="container-shell">
+    <SectionHeading title={title} description={description} />
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
+      {items.map((item) => (
+        <SurfaceCard class="p-4">
+          {item.icon && (
+            <p class="mono mb-2.5 text-sm text-brand-500">
+              {`<${item.icon} />`}
+            </p>
+          )}
+          <h3 class="mb-1.5 text-base font-semibold text-ink-900">{item.title}</h3>
+          <p class="m-0 text-sm leading-7 text-ink-500">
+            {item.description}
+          </p>
+        </SurfaceCard>
+      ))}
+    </div>
+  </div>
+</section>

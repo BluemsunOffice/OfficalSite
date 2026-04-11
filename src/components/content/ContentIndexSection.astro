@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ContentCard from "../cards/ContentCard.astro";
+import PageIntro from "../ui/PageIntro.astro";
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+type AnyEntry = CollectionEntry<"blog" | "news" | "projects">;
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow?: string;
+  entries: AnyEntry[];
+  emptyText: string;
+  hrefPrefix: "/blog/" | "/news/" | "/projects/";
+}
+
+const { title, description, eyebrow, entries, emptyText, hrefPrefix } = Astro.props;
+---
+
+<section class="section-shell">
+  <div class="container-shell">
+    <PageIntro title={title} description={description} eyebrow={eyebrow} />
+    {
+      entries.length > 0 ? (
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
+          {entries.map((entry) => (
+            <ContentCard
+              href={`${hrefPrefix}${entry.id}/`}
+              title={entry.data.title}
+              description={entry.data.description}
+              date={entry.data.date}
+              meta={entry.data.author}
+            />
+          ))}
+        </div>
+      ) : (
+        <SurfaceCard class="p-4 text-ink-500">{emptyText}</SurfaceCard>
+      )
+    }
+  </div>
+</section>

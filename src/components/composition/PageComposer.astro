@@ -1,0 +1,79 @@
+---
+import ContentShowcaseSection from "../sections/ContentShowcaseSection.astro";
+import CtaSection from "../sections/CtaSection.astro";
+import FeatureGridSection from "../sections/FeatureGridSection.astro";
+import GallerySection from "../sections/GallerySection.astro";
+import HeroSection from "../sections/HeroSection.astro";
+import JoinFormSection from "../sections/JoinFormSection.astro";
+import RichTextSection from "../sections/RichTextSection.astro";
+import StatsSection from "../sections/StatsSection.astro";
+import type { PageComposition } from "../../lib/page-composition";
+import { getPublishedCollection } from "../../lib/collections";
+
+interface Props {
+  composition: PageComposition;
+}
+
+const { composition } = Astro.props;
+const collectionCache = new Map<string, Awaited<ReturnType<typeof getPublishedCollection>>>();
+
+for (const section of composition.sections) {
+  if (section.type === "collectionPreview") {
+    const cacheKey = `${section.collection}:${section.homepageOnly ? "home" : "all"}`;
+    if (collectionCache.has(cacheKey)) {
+      continue;
+    }
+    collectionCache.set(
+      cacheKey,
+      await getPublishedCollection(section.collection, {
+        homepageOnly: section.homepageOnly,
+      }),
+    );
+  }
+}
+---
+
+{
+  composition.sections.map((section) => {
+    if (section.type === "hero") {
+      return <HeroSection {...section} />;
+    }
+
+    if (section.type === "featureGrid") {
+      return <FeatureGridSection {...section} />;
+    }
+
+    if (section.type === "stats") {
+      return <StatsSection {...section} />;
+    }
+
+    if (section.type === "collectionPreview") {
+      const cacheKey = `${section.collection}:${section.homepageOnly ? "home" : "all"}`;
+      const entries = collectionCache.get(cacheKey) ?? [];
+      return (
+        <ContentShowcaseSection
+          {...section}
+          entries={entries.slice(0, section.limit)}
+        />
+      );
+    }
+
+    if (section.type === "gallery") {
+      return <GallerySection {...section} />;
+    }
+
+    if (section.type === "richText") {
+      return <RichTextSection {...section} />;
+    }
+
+    if (section.type === "joinForm") {
+      return <JoinFormSection {...section} />;
+    }
+
+    if (section.type === "cta") {
+      return <CtaSection {...section} />;
+    }
+
+    return null;
+  })
+}

@@ -1,0 +1,38 @@
+---
+import { siteConfig } from "../config/site";
+import Header from "../components/ui/Header.astro";
+import Footer from "../components/ui/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang={siteConfig.language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | {siteConfig.zhName}</title>
+    <meta name="description" content={description ?? siteConfig.description} />
+    <meta property="og:title" content={title} />
+    <meta
+      property="og:description"
+      content={description ?? siteConfig.description}
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, siteConfig.domain).toString()} />
+  </head>
+  <body class="min-h-screen">
+    <Header currentPath={Astro.url.pathname} />
+    <main class="min-h-[70vh]">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

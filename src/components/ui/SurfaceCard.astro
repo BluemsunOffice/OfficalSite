@@ -1,0 +1,20 @@
+---
+const { as = "article", href, class: className = "" } = Astro.props;
+const tag = as;
+---
+
+{
+  tag === "a" ? (
+    <a href={href} class:list={["surface-card", className]}>
+      <slot />
+    </a>
+  ) : tag === "div" ? (
+    <div class:list={["surface-card", className]}>
+      <slot />
+    </div>
+  ) : (
+    <article class:list={["surface-card", className]}>
+      <slot />
+    </article>
+  )
+}

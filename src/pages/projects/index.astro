@@ -1,0 +1,18 @@
+---
+import ContentIndexSection from "../../components/content/ContentIndexSection.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getPublishedCollection } from "../../lib/collections";
+
+const entries = await getPublishedCollection("projects");
+---
+
+<MainLayout title="项目" description="蓝旭工作室项目展示">
+  <ContentIndexSection
+    title="项目"
+    description="从需求分析到上线交付的实践作品。"
+    eyebrow="PROJECTS"
+    entries={entries}
+    emptyText="暂无项目内容。"
+    hrefPrefix="/projects/"
+  />
+</MainLayout>

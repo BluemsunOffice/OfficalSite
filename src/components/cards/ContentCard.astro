@@ -1,0 +1,31 @@
+---
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+interface Props {
+  href: string;
+  title: string;
+  description?: string;
+  date: Date;
+  meta?: string;
+}
+
+const { href, title, description, date, meta } = Astro.props;
+---
+
+<SurfaceCard class="group grid gap-3 p-4">
+  <div class="flex items-center justify-between gap-2">
+    <time class="mono text-xs text-ink-500">
+      {date.toLocaleDateString("zh-CN")}
+    </time>
+    {meta && <span class="text-xs text-ink-500">{meta}</span>}
+  </div>
+  <h3 class="m-0 text-[1.08rem] font-semibold text-ink-900">
+    <a href={href} class="inline-flex items-center gap-1.5 transition group-hover:text-brand-500">
+      <span>{title}</span>
+      <span class="mono text-xs text-brand-400 transition group-hover:translate-x-0.5 group-hover:text-brand-500">
+        -&gt;
+      </span>
+    </a>
+  </h3>
+  {description && <p class="m-0 text-sm leading-6 text-ink-500">{description}</p>}
+</SurfaceCard>

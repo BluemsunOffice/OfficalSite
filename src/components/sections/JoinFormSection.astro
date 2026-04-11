@@ -1,0 +1,78 @@
+---
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+interface Props {
+  id?: string;
+  title?: string;
+  description?: string;
+  endpointEnv: string;
+  successMessage?: string;
+  failureMessage?: string;
+}
+
+const {
+  id,
+  title = "报名表单",
+  description,
+  endpointEnv,
+  successMessage = "提交成功。",
+  failureMessage = "提交失败。",
+} = Astro.props;
+
+const endpoint = process.env[endpointEnv] ?? "";
+---
+
+<section id={id} class="section-shell">
+  <div class="container-shell">
+    <SurfaceCard class="p-5">
+      <h2 class="text-2xl font-bold text-ink-900">{title}</h2>
+      {description && <p class="mt-3 text-ink-500">{description}</p>}
+      <form id="join-form" class="mt-4 grid gap-3">
+        <input name="name" placeholder="姓名" required class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500" />
+        <input name="major" placeholder="专业/班级" required class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500" />
+        <input name="contact" placeholder="联系方式" required class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500" />
+        <textarea name="intro" placeholder="自我介绍与技术兴趣" rows={4} class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500"></textarea>
+        <button type="submit" class="w-fit rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">提交报名</button>
+      </form>
+      <p id="join-form-status" class="mono mt-3 text-xs text-ink-500"></p>
+    </SurfaceCard>
+  </div>
+</section>
+
+<script is:inline define:vars={{ endpoint, successMessage, failureMessage }}>
+  const form = document.getElementById("join-form");
+  const status = document.getElementById("join-form-status");
+
+  if (form && status) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!endpoint) {
+        status.textContent = "未配置表单提交地址，请设置环境变量。";
+        return;
+      }
+
+      const payload = Object.fromEntries(new FormData(form).entries());
+      status.textContent = "提交中...";
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error("Request failed");
+        }
+
+        status.textContent = successMessage;
+        form.reset();
+      } catch {
+        status.textContent = failureMessage;
+      }
+    });
+  }
+</script>

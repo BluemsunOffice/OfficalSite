@@ -1,0 +1,20 @@
+---
+import MotionGallery, { type GalleryItem } from "../motion/MotionGallery";
+import SectionHeading from "../ui/SectionHeading.astro";
+
+interface Props {
+  id?: string;
+  title: string;
+  description?: string;
+  items: GalleryItem[];
+}
+
+const { id, title, description, items } = Astro.props;
+---
+
+<section id={id} class="section-shell">
+  <div class="container-shell">
+    <SectionHeading title={title} description={description} />
+    <MotionGallery client:visible items={items} />
+  </div>
+</section>

@@ -1,0 +1,21 @@
+---
+import SectionHeading from "../ui/SectionHeading.astro";
+import SurfaceCard from "../ui/SurfaceCard.astro";
+
+interface Props {
+  id?: string;
+  title?: string;
+  content: string;
+}
+
+const { id, title, content } = Astro.props;
+---
+
+<section id={id} class="section-shell">
+  <div class="container-shell">
+    {title && <SectionHeading title={title} />}
+    <SurfaceCard class="whitespace-pre-wrap p-5 text-[15px] leading-8 text-ink-700">
+      {content}
+    </SurfaceCard>
+  </div>
+</section>
