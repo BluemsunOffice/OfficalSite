@@ -16,13 +16,13 @@ export default function HeroBadgeStrip({ badges }: HeroBadgeStripProps) {
       {badges.map((badge, index) => (
         <motion.li
           key={badge}
-          className="mono rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs text-brand-600"
+          className="mono rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-900"
           initial={reduceMotion ? false : { opacity: 0, y: 8 }}
           whileInView={reduceMotion ? {} : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.7 }}
           transition={{ duration: 0.28, delay: index * 0.05 }}
         >
-          {badge}
+          #{badge}
         </motion.li>
       ))}
     </ul>
