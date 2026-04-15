@@ -6,8 +6,14 @@ interface Props {
   title?: string;
   description?: string;
   endpointEnv: string;
+  uploadEndpoint?: string;
+  submitEndpoint?: string;
   successMessage?: string;
   failureMessage?: string;
+  imageQuality?: number;
+  imageMaxWidth?: number;
+  imageMaxHeight?: number;
+  studentIdLength?: number;
 }
 
 const {
@@ -15,11 +21,17 @@ const {
   title = "报名表单",
   description,
   endpointEnv,
+  uploadEndpoint = "https://www.bluemsun.com.cn:8000/upload/img",
+  submitEndpoint = "https://www.bluemsun.com.cn:8000/upload/application",
   successMessage = "提交成功。",
   failureMessage = "提交失败。",
+  imageQuality = 0.9,
+  imageMaxWidth = 800,
+  imageMaxHeight = 600,
+  studentIdLength = 10,
 } = Astro.props;
 
-const endpoint = process.env[endpointEnv] ?? "";
+const endpoint = process.env[endpointEnv] ?? submitEndpoint;
 ---
 
 <section id={id} class="section-shell">
@@ -27,52 +39,325 @@ const endpoint = process.env[endpointEnv] ?? "";
     <SurfaceCard class="p-5">
       <h2 class="text-2xl font-bold text-ink-900">{title}</h2>
       {description && <p class="mt-3 text-ink-500">{description}</p>}
-      <form id="join-form" class="mt-4 grid gap-3">
-        <input name="name" placeholder="姓名" required class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500" />
-        <input name="major" placeholder="专业/班级" required class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500" />
-        <input name="contact" placeholder="联系方式" required class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500" />
-        <textarea name="intro" placeholder="自我介绍与技术兴趣" rows={4} class="rounded-lg border border-brand-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500"></textarea>
-        <button type="submit" class="w-fit rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">提交报名</button>
+      <form id="join-form" class="mt-4 grid gap-4">
+        <div>
+          <label
+            for="file-upload"
+            class="inline-block cursor-pointer rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm transition hover:border-blue-400 shadow-sm"
+          >
+            <i class="fa-solid fa-image"></i>
+            <span>选择照片</span>
+            <input
+              id="file-upload"
+              type="file"
+              name="photo"
+              class="hidden"
+              accept="image/png, image/jpeg, image/gif, image/webp, image/svg+xml"
+            />
+          </label>
+          <span id="file-name" class="ml-3 text-sm text-ink-500"
+            >请上传一张你的生活照~</span
+          >
+        </div>
+
+        <input
+          name="name"
+          placeholder="姓名"
+          required
+          class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
+        />
+
+        <input
+          name="number"
+          placeholder="学号"
+          required
+          class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
+        />
+
+        <div class="grid grid-cols-3 gap-4">
+          <select
+            name="major"
+            required
+            class="form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
+          >
+            <option value="" disabled selected>专业</option>
+            <option value="0">计算机类</option>
+            <option value="1">计算机科学与技术（中美）</option>
+            <option value="2">教育技术学（公费师范）</option>
+            <option value="3">其他</option>
+          </select>
+          <select
+            name="sex"
+            required
+            class="form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
+          >
+            <option value="" disabled selected>性别</option>
+            <option value="0">女</option>
+            <option value="1">男</option>
+          </select>
+          <select
+            name="subject"
+            required
+            class="form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
+          >
+            <option value="" disabled selected>意向部门</option>
+            <option value="0">前端</option>
+            <option value="1">后端</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <input
+            name="mail"
+            placeholder="邮箱"
+            required
+            class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
+          />
+          <input
+            name="phone"
+            placeholder="电话号码"
+            required
+            class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
+          />
+        </div>
+
+        <textarea
+          name="cv"
+          placeholder="个人介绍(可以从个人技能、学业、兴趣爱好等方面介绍)"
+          rows={4}
+          required
+          class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm resize-none"
+        ></textarea>
+
+        <button
+          type="submit"
+          class="w-fit rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
+          >提交报名</button
+        >
       </form>
       <p id="join-form-status" class="mono mt-3 text-xs text-ink-500"></p>
     </SurfaceCard>
   </div>
 </section>
 
-<script is:inline define:vars={{ endpoint, successMessage, failureMessage }}>
+<div
+  id="successModal"
+  class="fixed inset-0 hidden items-center justify-center bg-black/50 z-50"
+>
+  <div class="w-80 rounded-lg bg-white p-6 shadow-lg text-center">
+    <div class="text-lg font-bold mb-4 text-ink-900">提交成功</div>
+    <div class="mb-6 text-ink-600" id="successMessage">
+      您的表单已成功提交！
+    </div>
+    <button
+      class="rounded-lg bg-brand-500 px-6 py-2 text-white transition hover:bg-brand-700"
+      id="closeSuccessModal">关闭</button
+    >
+  </div>
+</div>
+
+<div
+  id="failureModal"
+  class="fixed inset-0 hidden items-center justify-center bg-black/50 z-50"
+>
+  <div class="w-80 rounded-lg bg-white p-6 shadow-lg text-center">
+    <div class="text-lg font-bold mb-4 text-red-600">提交失败</div>
+    <div class="mb-6 text-ink-600" id="failureMessage">
+      提交失败，请稍后重试！
+    </div>
+    <button
+      class="rounded-lg bg-brand-500 px-6 py-2 text-white transition hover:bg-brand-700"
+      id="closeFailureModal">关闭</button
+    >
+  </div>
+</div>
+
+<script
+  define:vars={{
+    endpoint,
+    uploadEndpoint,
+    successMessage,
+    failureMessage,
+    imageQuality,
+    imageMaxWidth,
+    imageMaxHeight,
+    studentIdLength,
+  }}
+>
+  const PHONE_REGEX = /^1[3-9]\d{9}$/;
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  let uploadedImage = "";
   const form = document.getElementById("join-form");
-  const status = document.getElementById("join-form-status");
+  const fileUpload = document.getElementById("file-upload");
+  const fileName = document.getElementById("file-name");
 
-  if (form && status) {
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+  function compressImage(file, quality, callback) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        let { width, height } = img;
 
-      if (!endpoint) {
-        status.textContent = "未配置表单提交地址，请设置环境变量。";
-        return;
-      }
-
-      const payload = Object.fromEntries(new FormData(form).entries());
-      status.textContent = "提交中...";
-
-      try {
-        const response = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          throw new Error("Request failed");
+        if (width > height) {
+          if (width > imageMaxWidth) {
+            height *= imageMaxWidth / width;
+            width = imageMaxWidth;
+          }
+        } else if (height > imageMaxHeight) {
+          width *= imageMaxHeight / height;
+          height = imageMaxHeight;
         }
 
-        status.textContent = successMessage;
-        form.reset();
-      } catch {
-        status.textContent = failureMessage;
-      }
-    });
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            callback(
+              new File([blob], file.name, {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              }),
+            );
+          },
+          "image/jpeg",
+          quality,
+        );
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
+
+  function showModal(type, message) {
+    const modal = document.getElementById(`${type}Modal`);
+    document.getElementById(`${type}Message`).textContent = message;
+    modal.classList.remove("hidden");
+  }
+
+  function validateForm(fields) {
+    if (uploadedImage === "") return "请选择图片";
+    if (!fields.name.value.trim()) return "请填写姓名";
+    if (fields.name.value.length < 2) return "姓名长度不少于2";
+    if (!fields.number.value.trim()) return "请填写学号";
+    if (fields.number.value.length !== studentIdLength)
+      return `请填写正确的学号（${studentIdLength}位）`;
+    if (!fields.major.value) return "请选择专业";
+    if (!fields.sex.value) return "请选择性别";
+    if (!fields.subject.value) return "请选择意向部门";
+    if (!fields.cv.value.trim()) return "请填写介绍";
+    if (!fields.phone.value.trim()) return "请填写手机号";
+    if (!PHONE_REGEX.test(fields.phone.value.trim()))
+      return "请填写正确的手机号";
+    if (!fields.mail.value.trim()) return "请填写邮箱";
+    if (!EMAIL_REGEX.test(fields.mail.value.trim())) return "请填写正确的邮箱";
+    return null;
+  }
+
+  fileUpload?.addEventListener("change", (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    compressImage(file, imageQuality, (compressed) => {
+      fileName.textContent = `已选择文件：${file.name}`;
+      const formData = new FormData();
+      formData.append("file", compressed);
+      fetch(uploadEndpoint, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.code === 200) uploadedImage = data.data;
+          else {
+            showModal("failure", data.msg || "上传图片失败");
+            fileName.textContent = "请上传一张你的生活照~";
+          }
+        })
+        .catch(() => {
+          showModal("failure", "上传图片失败");
+          fileName.textContent = "请上传一张你的生活照~";
+        });
+    });
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const fields = {
+      name: form.querySelector('[name="name"]'),
+      number: form.querySelector('[name="number"]'),
+      major: form.querySelector('[name="major"]'),
+      sex: form.querySelector('[name="sex"]'),
+      subject: form.querySelector('[name="subject"]'),
+      mail: form.querySelector('[name="mail"]'),
+      phone: form.querySelector('[name="phone"]'),
+      cv: form.querySelector('[name="cv"]'),
+    };
+
+    const error = validateForm(fields);
+    if (error) {
+      showModal("failure", error);
+      return;
+    }
+
+    if (!endpoint) {
+      showModal("failure", "未配置表单提交地址");
+      return;
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fields.name.value,
+          number: fields.number.value,
+          major: fields.major.value,
+          sex: fields.sex.value,
+          position: fields.subject.value,
+          email: fields.mail.value,
+          phone: fields.phone.value,
+          intro: fields.cv.value,
+          img: uploadedImage,
+        }),
+      });
+      const data = await response.json();
+      if (data.code === 200) {
+        showModal("success", successMessage);
+        form.reset();
+        uploadedImage = "";
+        fileName.textContent = "请上传一张你的生活照~";
+      } else {
+        showModal("failure", data.msg || failureMessage);
+      }
+    } catch (error) {
+      console.error("提交失败", error);
+      showModal("failure", failureMessage);
+    }
+  });
+
+  document
+    .getElementById("closeSuccessModal")
+    ?.addEventListener("click", () => {
+      document.getElementById("successModal").classList.add("hidden");
+    });
+
+  document
+    .getElementById("closeFailureModal")
+    ?.addEventListener("click", () => {
+      document.getElementById("failureModal").classList.add("hidden");
+    });
 </script>
+
+<style>
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234f46e5' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 28px;
+  }
+</style>

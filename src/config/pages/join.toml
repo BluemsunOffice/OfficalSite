@@ -16,8 +16,14 @@ secondaryHref = "/blog/"
 [[sections]]
 type = "joinForm"
 id = "join-form"
-title = "报名表单"
+title = "欢迎每一个对技术有热情的你 🎉"
 description = "当前为表单组件占位，迁移时替换为真实收集渠道。"
 endpointEnv = "PUBLIC_JOIN_FORM_ENDPOINT"
+uploadEndpoint = "https://www.bluemsun.com.cn:8000/upload/img"
+submitEndpoint = "https://www.bluemsun.com.cn:8000/upload/application"
 successMessage = "提交成功，我们会尽快联系你。"
 failureMessage = "提交失败，请稍后重试。"
+imageQuality = 0.9
+imageMaxWidth = 800
+imageMaxHeight = 600
+studentIdLength = 10
