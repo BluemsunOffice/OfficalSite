@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import ContentCard from "../cards/ContentCard.astro";
+import ContentLayoutGrid from "../motion/ContentLayoutGrid";
 import PageIntro from "../ui/PageIntro.astro";
 import SurfaceCard from "../ui/SurfaceCard.astro";
 
@@ -15,7 +15,24 @@ interface Props {
   hrefPrefix: "/blog/" | "/news/" | "/projects/";
 }
 
-const { title, description, eyebrow, entries, emptyText, hrefPrefix } = Astro.props;
+const { title, description, eyebrow, entries, emptyText, hrefPrefix } =
+  Astro.props;
+
+const storageKeyMap: Record<string, string> = {
+  "/blog/": "layout-columns-blog",
+  "/news/": "layout-columns-news",
+  "/projects/": "layout-columns-projects",
+};
+const storageKey = storageKeyMap[hrefPrefix] ?? "layout-columns-default";
+
+const items = entries.map((entry) => ({
+  id: entry.id,
+  href: `${hrefPrefix}${entry.id}/`,
+  title: entry.data.title,
+  description: entry.data.description,
+  dateText: entry.data.date.toLocaleDateString("zh-CN"),
+  meta: entry.data.author,
+}));
 ---
 
 <section class="section-shell">
@@ -23,17 +40,7 @@ const { title, description, eyebrow, entries, emptyText, hrefPrefix } = Astro.pr
     <PageIntro title={title} description={description} eyebrow={eyebrow} />
     {
       entries.length > 0 ? (
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-          {entries.map((entry) => (
-            <ContentCard
-              href={`${hrefPrefix}${entry.id}/`}
-              title={entry.data.title}
-              description={entry.data.description}
-              date={entry.data.date}
-              meta={entry.data.author}
-            />
-          ))}
-        </div>
+        <ContentLayoutGrid client:load items={items} storageKey={storageKey} />
       ) : (
         <SurfaceCard class="p-4 text-ink-500">{emptyText}</SurfaceCard>
       )
