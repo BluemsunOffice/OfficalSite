@@ -21,17 +21,40 @@ const {
   class: customClass = "",
 } = Astro.props;
 
-const baseClass =
-  "rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm resize-none";
-const combinedClass = `${baseClass} ${customClass}`.trim();
+const textareaClass =
+  "bg-transparent outline-none w-full text-sm placeholder-ink-400 resize-none";
+const combinedTextareaClass = `${textareaClass} ${customClass}`.trim();
 ---
 
-<textarea
-  {name}
-  {id}
-  {placeholder}
-  {required}
-  {disabled}
-  {rows}
-  class={combinedClass}>{value}</textarea
+<div
+  class="textarea-wrapper rounded-lg border border-blue-300 bg-white shadow-sm transition p-3"
 >
+  <div class="flex items-start gap-2 mb-2">
+    <slot name="prefix" />
+  </div>
+  <textarea
+    {name}
+    {id}
+    {placeholder}
+    {required}
+    {disabled}
+    {rows}
+    class={combinedTextareaClass}>{value}</textarea
+  >
+  <div class="flex items-end gap-2 mt-2">
+    <slot name="suffix" />
+  </div>
+</div>
+
+<style>
+  .textarea-wrapper {
+    border-color: rgb(191, 219, 254);
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .textarea-wrapper:focus-within {
+    border-color: rgb(96, 165, 250);
+    box-shadow: 0 0 0 2px rgba(219, 234, 255, 1);
+  }
+</style>

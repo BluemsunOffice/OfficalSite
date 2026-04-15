@@ -1,6 +1,7 @@
 ---
 import SurfaceCard from "../ui/SurfaceCard.astro";
 import { FileUpload, Input, Select, Textarea, Button } from "../common/index";
+import FormIcon from "../common/FormIcon";
 
 interface Props {
   id?: string;
@@ -48,30 +49,41 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
           >
         </div>
 
-        <Input name="name" placeholder="姓名" required />
+        <Input name="name" placeholder="姓名" required>
+          <FormIcon slot="prefix" name="user" />
+        </Input>
 
-        <Input name="number" placeholder="学号" required />
+        <Input name="number" placeholder="学号" required>
+          <FormIcon slot="prefix" name="id-card" />
+        </Input>
 
         <div class="grid grid-cols-3 gap-4">
           <Select name="major" required placeholder="专业">
+            <FormIcon slot="prefix" name="book" />
             <option value="0">计算机类</option>
             <option value="1">计算机科学与技术（中美）</option>
             <option value="2">教育技术学（公费师范）</option>
             <option value="3">其他</option>
           </Select>
           <Select name="sex" required placeholder="性别">
+            <FormIcon slot="prefix" name="person" />
             <option value="0">女</option>
             <option value="1">男</option>
           </Select>
           <Select name="subject" required placeholder="意向部门">
+            <FormIcon slot="prefix" name="briefcase" />
             <option value="0">前端</option>
             <option value="1">后端</option>
           </Select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <Input name="mail" placeholder="邮箱" required />
-          <Input name="phone" placeholder="电话号码" required />
+          <Input name="mail" placeholder="邮箱" required>
+            <FormIcon slot="prefix" name="mail" />
+          </Input>
+          <Input name="phone" placeholder="电话号码" required>
+            <FormIcon slot="prefix" name="phone" />
+          </Input>
         </div>
 
         <Textarea
@@ -79,7 +91,9 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
           placeholder="个人介绍(可以从个人技能、学业、兴趣爱好等方面介绍)"
           rows={4}
           required
-        />
+        >
+          <FormIcon slot="prefix" name="pen" />
+        </Textarea>
 
         <Button type="submit" class="w-fit">提交报名</Button>
       </form>

@@ -24,18 +24,44 @@ const {
   placeholder,
 } = Astro.props;
 
-const baseClass =
-  "form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm";
-const combinedClass = `${baseClass} ${customClass}`.trim();
+const selectClass = "form-select bg-transparent outline-none flex-1 text-sm";
+const combinedSelectClass = `${selectClass} ${customClass}`.trim();
 ---
 
-<select {name} {id} {required} {disabled} {value} class={combinedClass}>
-  {
-    placeholder && (
-      <option value="" disabled selected>
-        {placeholder}
-      </option>
-    )
+<div
+  class="select-wrapper inline-flex items-center gap-2 rounded-lg border border-blue-300 bg-white px-3 py-2.5 shadow-sm transition"
+>
+  <slot name="prefix" />
+  <select {name} {id} {required} {disabled} {value} class={combinedSelectClass}>
+    {
+      placeholder && (
+        <option value="" disabled selected>
+          {placeholder}
+        </option>
+      )
+    }
+    <slot />
+  </select>
+  <slot name="suffix" />
+</div>
+
+<style>
+  .select-wrapper {
+    border-color: rgb(191, 219, 254);
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   }
-  <slot />
-</select>
+
+  .select-wrapper:focus-within {
+    border-color: rgb(96, 165, 250);
+    box-shadow: 0 0 0 2px rgba(219, 234, 255, 1);
+  }
+
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234f46e5' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 20px;
+  }
+</style>
