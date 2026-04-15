@@ -1,6 +1,13 @@
 ---
 import SurfaceCard from "../ui/SurfaceCard.astro";
-import { FileUpload, Input, Select, Textarea, Button } from "../common/index";
+import {
+  FileUpload,
+  Input,
+  Select,
+  Textarea,
+  Button,
+  Modal,
+} from "../common/index";
 import FormIcon from "../common/FormIcon";
 
 interface Props {
@@ -42,11 +49,21 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
       <h2 class="text-2xl font-bold text-ink-900">{title}</h2>
       {description && <p class="mt-3 text-ink-500">{description}</p>}
       <form id="join-form" class="mt-4 grid gap-4">
-        <div>
-          <FileUpload id="file-upload" name="photo" label="选择照片" />
-          <span id="file-name" class="ml-3 text-sm text-ink-500"
+        <div class="flex items-center gap-3 flex-wrap">
+          <FileUpload id="file-upload" name="photo" label="选择照片">
+            <FormIcon slot="icon" name="image" />
+          </FileUpload>
+          <span id="file-name" class="text-sm text-ink-500"
             >请上传一张你的生活照~</span
           >
+          <button
+            id="photo-preview-btn"
+            type="button"
+            class="hidden items-center gap-1.5 rounded-lg border border-brand-100 bg-white px-2.5 py-2 text-sm text-ink-500 shadow-sm transition hover:border-brand-300 hover:text-brand-500"
+          >
+            <FormIcon name="zoom-in" />
+            <span>查看照片</span>
+          </button>
         </div>
 
         <Input name="name" placeholder="姓名" required>
@@ -102,6 +119,15 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
   </div>
 </section>
 
+<Modal id="photo-preview-modal" title="照片预览">
+  <img
+    id="photo-preview-img"
+    src=""
+    alt="上传的照片"
+    class="max-h-96 w-full object-contain rounded-lg"
+  />
+</Modal>
+
 <div
   id="successModal"
   class="fixed inset-0 hidden items-center justify-center bg-black/50 z-50"
@@ -147,6 +173,15 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
   const form = document.getElementById("join-form");
   const fileUpload = document.getElementById("file-upload");
   const fileName = document.getElementById("file-name");
+  const previewBtn = document.getElementById("photo-preview-btn");
+  const previewImg = document.getElementById("photo-preview-img");
+  const previewModal = document.getElementById("photo-preview-modal");
+
+  // 预览按钮点击：打开照片弹窗
+  previewBtn?.addEventListener("click", () => {
+    previewModal?.classList.remove("hidden");
+    previewModal?.classList.add("flex");
+  });
 
   function compressImage(file, quality, callback) {
     const reader = new FileReader();
@@ -227,8 +262,13 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
       })
         .then((r) => r.json())
         .then((data) => {
-          if (data.code === 200) uploadedImage = data.data;
-          else {
+          if (data.code === 200) {
+            uploadedImage = data.data;
+            // 显示预览按钮
+            previewBtn?.classList.remove("hidden");
+            previewBtn?.classList.add("inline-flex");
+            if (previewImg) previewImg.src = data.data;
+          } else {
             showModal("failure", data.msg || "上传图片失败");
             fileName.textContent = "请上传一张你的生活照~";
           }
@@ -286,6 +326,10 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
         form.reset();
         uploadedImage = "";
         fileName.textContent = "请上传一张你的生活照~";
+        // 重置预览按钮
+        previewBtn?.classList.add("hidden");
+        previewBtn?.classList.remove("inline-flex");
+        if (previewImg) previewImg.src = "";
       } else {
         showModal("failure", data.msg || failureMessage);
       }

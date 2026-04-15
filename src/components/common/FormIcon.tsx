@@ -7,6 +7,8 @@ import {
   Mail,
   Phone,
   PenLine,
+  ImagePlus,
+  ZoomIn,
   type LucideIcon,
 } from "lucide-react";
 
@@ -18,7 +20,9 @@ export type FormIconName =
   | "briefcase"
   | "mail"
   | "phone"
-  | "pen";
+  | "pen"
+  | "image"
+  | "zoom-in";
 
 const iconMap: Record<FormIconName, LucideIcon> = {
   user: User,
@@ -29,6 +33,8 @@ const iconMap: Record<FormIconName, LucideIcon> = {
   mail: Mail,
   phone: Phone,
   pen: PenLine,
+  image: ImagePlus,
+  "zoom-in": ZoomIn,
 };
 
 interface FormIconProps {

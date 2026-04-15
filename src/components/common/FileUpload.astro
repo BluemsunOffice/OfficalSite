@@ -22,15 +22,13 @@ const {
 } = Astro.props;
 
 const baseClass =
-  "inline-block cursor-pointer rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm transition hover:border-blue-400 shadow-sm";
+  "inline-flex items-center gap-2 cursor-pointer rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm transition hover:border-blue-400 shadow-sm";
 const combinedClass = `${baseClass} ${customClass}`.trim();
 ---
 
 <label for={id} class={combinedClass}>
-  <slot name="icon">
-    <i class="fa-solid fa-image"></i>
-  </slot>
-  <span class="ml-2">{label}</span>
+  <slot name="icon" />
+  <span>{label}</span>
   <input
     {id}
     {name}

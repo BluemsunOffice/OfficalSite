@@ -1,0 +1,65 @@
+---
+interface Props {
+  id: string;
+  title?: string;
+  maxWidth?: string;
+}
+
+const { id, title, maxWidth = "max-w-lg" } = Astro.props;
+---
+
+<div
+  id={id}
+  class="modal-overlay fixed inset-0 hidden items-center justify-center bg-black/60 z-50 p-4"
+>
+  <div class={`modal-panel relative w-full bg-white rounded-2xl shadow-2xl overflow-hidden ${maxWidth}`}>
+    {title && (
+      <div class="flex items-center justify-between px-4 py-3 border-b border-brand-100">
+        <span class="text-sm font-semibold text-ink-900">{title}</span>
+        <button
+          class="modal-close-btn rounded-lg p-1.5 text-ink-500 transition hover:bg-brand-50 hover:text-ink-900"
+          aria-label="关闭"
+        >
+          <!-- Lucide X icon (inlined SVG) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </button>
+      </div>
+    )}
+    <div class="p-4">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<script>
+  // 事件委托：处理所有 Modal 组件的关闭逻辑（Astro 会自动去重，只执行一次）
+  function hideModal(modal: Element) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+
+    // 点击关闭按钮
+    const closeBtn = target.closest(".modal-close-btn");
+    if (closeBtn) {
+      const overlay = closeBtn.closest(".modal-overlay");
+      if (overlay) hideModal(overlay);
+      return;
+    }
+
+    // 点击蒙层背景（直接点击 overlay 本身，不是内部的 panel）
+    if (target.classList.contains("modal-overlay")) {
+      hideModal(target);
+    }
+  });
+
+  // ESC 关闭所有打开的 Modal
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    document.querySelectorAll(".modal-overlay.flex").forEach(hideModal);
+  });
+</script>
