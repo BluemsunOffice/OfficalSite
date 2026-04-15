@@ -130,7 +130,8 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
 
 <div
   id="successModal"
-  class="fixed inset-0 hidden items-center justify-center bg-black/50 z-50"
+  class="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+  style="display: none;"
 >
   <div class="w-80 rounded-lg bg-white p-6 shadow-lg text-center">
     <div class="text-lg font-bold mb-4 text-ink-900">提交成功</div>
@@ -143,7 +144,8 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
 
 <div
   id="failureModal"
-  class="fixed inset-0 hidden items-center justify-center bg-black/50 z-50"
+  class="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+  style="display: none;"
 >
   <div class="w-80 rounded-lg bg-white p-6 shadow-lg text-center">
     <div class="text-lg font-bold mb-4 text-red-600">提交失败</div>
@@ -179,8 +181,7 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
 
   // 预览按钮点击：打开照片弹窗
   previewBtn?.addEventListener("click", () => {
-    previewModal?.classList.remove("hidden");
-    previewModal?.classList.add("flex");
+    if (previewModal) previewModal.style.display = "flex";
   });
 
   function compressImage(file, quality, callback) {
@@ -226,7 +227,7 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
   function showModal(type, message) {
     const modal = document.getElementById(`${type}Modal`);
     document.getElementById(`${type}Message`).textContent = message;
-    modal.classList.remove("hidden");
+    if (modal) modal.style.display = "flex";
   }
 
   function validateForm(fields) {
@@ -342,13 +343,15 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
   document
     .getElementById("closeSuccessModal")
     ?.addEventListener("click", () => {
-      document.getElementById("successModal").classList.add("hidden");
+      const m = document.getElementById("successModal");
+      if (m) m.style.display = "none";
     });
 
   document
     .getElementById("closeFailureModal")
     ?.addEventListener("click", () => {
-      document.getElementById("failureModal").classList.add("hidden");
+      const m = document.getElementById("failureModal");
+      if (m) m.style.display = "none";
     });
 </script>
 
