@@ -1,5 +1,5 @@
 ---
-title: "爱心超市（示例）"
+title: "[项目介绍（示例）]爱心超市"
 description: "校园场景的小型电商系统，用于演示项目列表。"
 date: 2026-04-05
 author: "Bluemsun Team"
