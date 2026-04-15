@@ -1,0 +1,17 @@
+---
+interface Props {
+  for?: string;
+  class?: string;
+  required?: boolean;
+}
+
+const { for: htmlFor, class: customClass = "", required = false } = Astro.props;
+
+const baseClass = "block text-sm font-medium text-ink-900 mb-2";
+const combinedClass = `${baseClass} ${customClass}`.trim();
+---
+
+<label for={htmlFor} class={combinedClass}>
+  <slot />
+  {required && <span class="text-red-500 ml-1">*</span>}
+</label>

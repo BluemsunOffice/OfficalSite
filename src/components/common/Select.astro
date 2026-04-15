@@ -1,0 +1,41 @@
+---
+interface Props {
+  name?: string;
+  id?: string;
+  required?: boolean;
+  disabled?: boolean;
+  value?: string;
+  class?: string;
+  placeholder?: string;
+}
+
+export interface Option {
+  value: string | number;
+  label: string;
+}
+
+const {
+  name,
+  id,
+  required = false,
+  disabled = false,
+  value,
+  class: customClass = "",
+  placeholder,
+} = Astro.props;
+
+const baseClass =
+  "form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm";
+const combinedClass = `${baseClass} ${customClass}`.trim();
+---
+
+<select {name} {id} {required} {disabled} {value} class={combinedClass}>
+  {
+    placeholder && (
+      <option value="" disabled selected>
+        {placeholder}
+      </option>
+    )
+  }
+  <slot />
+</select>

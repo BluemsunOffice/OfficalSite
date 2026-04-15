@@ -1,0 +1,55 @@
+---
+type InputType =
+  | "text"
+  | "email"
+  | "password"
+  | "number"
+  | "tel"
+  | "url"
+  | "search"
+  | "date"
+  | "time"
+  | "datetime-local"
+  | "month"
+  | "week"
+  | "color"
+  | "file"
+  | "hidden";
+
+interface Props {
+  name?: string;
+  placeholder?: string;
+  type?: InputType;
+  value?: string;
+  required?: boolean;
+  disabled?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const {
+  name,
+  placeholder,
+  type = "text",
+  value,
+  required = false,
+  disabled = false,
+  id,
+  class: customClass = "",
+} = Astro.props;
+
+const baseClass =
+  "rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm";
+const combinedClass = `${baseClass} ${customClass}`.trim();
+---
+
+<input
+  {type}
+  {name}
+  {placeholder}
+  {value}
+  {id}
+  {required}
+  {disabled}
+  class={combinedClass}
+/>

@@ -1,5 +1,6 @@
 ---
 import SurfaceCard from "../ui/SurfaceCard.astro";
+import { FileUpload, Input, Select, Textarea, Button } from "../common/index";
 
 interface Props {
   id?: string;
@@ -41,99 +42,46 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
       {description && <p class="mt-3 text-ink-500">{description}</p>}
       <form id="join-form" class="mt-4 grid gap-4">
         <div>
-          <label
-            for="file-upload"
-            class="inline-block cursor-pointer rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm transition hover:border-blue-400 shadow-sm"
-          >
-            <i class="fa-solid fa-image"></i>
-            <span>选择照片</span>
-            <input
-              id="file-upload"
-              type="file"
-              name="photo"
-              class="hidden"
-              accept="image/png, image/jpeg, image/gif, image/webp, image/svg+xml"
-            />
-          </label>
+          <FileUpload id="file-upload" name="photo" label="选择照片" />
           <span id="file-name" class="ml-3 text-sm text-ink-500"
             >请上传一张你的生活照~</span
           >
         </div>
 
-        <input
-          name="name"
-          placeholder="姓名"
-          required
-          class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
-        />
+        <Input name="name" placeholder="姓名" required />
 
-        <input
-          name="number"
-          placeholder="学号"
-          required
-          class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
-        />
+        <Input name="number" placeholder="学号" required />
 
         <div class="grid grid-cols-3 gap-4">
-          <select
-            name="major"
-            required
-            class="form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
-          >
-            <option value="" disabled selected>专业</option>
+          <Select name="major" required placeholder="专业">
             <option value="0">计算机类</option>
             <option value="1">计算机科学与技术（中美）</option>
             <option value="2">教育技术学（公费师范）</option>
             <option value="3">其他</option>
-          </select>
-          <select
-            name="sex"
-            required
-            class="form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
-          >
-            <option value="" disabled selected>性别</option>
+          </Select>
+          <Select name="sex" required placeholder="性别">
             <option value="0">女</option>
             <option value="1">男</option>
-          </select>
-          <select
-            name="subject"
-            required
-            class="form-select rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
-          >
-            <option value="" disabled selected>意向部门</option>
+          </Select>
+          <Select name="subject" required placeholder="意向部门">
             <option value="0">前端</option>
             <option value="1">后端</option>
-          </select>
+          </Select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-          <input
-            name="mail"
-            placeholder="邮箱"
-            required
-            class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
-          />
-          <input
-            name="phone"
-            placeholder="电话号码"
-            required
-            class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm"
-          />
+          <Input name="mail" placeholder="邮箱" required />
+          <Input name="phone" placeholder="电话号码" required />
         </div>
 
-        <textarea
+        <Textarea
           name="cv"
           placeholder="个人介绍(可以从个人技能、学业、兴趣爱好等方面介绍)"
           rows={4}
           required
-          class="rounded-lg border border-blue-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder-ink-400 focus:border-blue-400 focus:ring-2 focus:ring-brand-200 shadow-sm resize-none"
-        ></textarea>
+        />
 
-        <button
-          type="submit"
-          class="w-fit rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
-          >提交报名</button
-        >
+        <Button type="submit" class="w-fit">提交报名</Button>
       </form>
       <p id="join-form-status" class="mono mt-3 text-xs text-ink-500"></p>
     </SurfaceCard>
@@ -149,10 +97,7 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
     <div class="mb-6 text-ink-600" id="successMessage">
       您的表单已成功提交！
     </div>
-    <button
-      class="rounded-lg bg-brand-500 px-6 py-2 text-white transition hover:bg-brand-700"
-      id="closeSuccessModal">关闭</button
-    >
+    <Button id="closeSuccessModal" variant="primary">关闭</Button>
   </div>
 </div>
 
@@ -165,10 +110,7 @@ const endpoint = process.env[endpointEnv] ?? submitEndpoint;
     <div class="mb-6 text-ink-600" id="failureMessage">
       提交失败，请稍后重试！
     </div>
-    <button
-      class="rounded-lg bg-brand-500 px-6 py-2 text-white transition hover:bg-brand-700"
-      id="closeFailureModal">关闭</button
-    >
+    <Button id="closeFailureModal" variant="primary">关闭</Button>
   </div>
 </div>
 
