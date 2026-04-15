@@ -55,10 +55,14 @@ const { currentPath } = Astro.props;
           target="_blank"
           rel="noreferrer"
           variant="outline"
+          icon="external"
+          iconPosition="end"
         >
           GitHub
         </Link>
-        <Link href="/join/" variant="primary"> 联系我们 </Link>
+        <Link href="/join/" variant="rainbowOutline" icon="join">
+          加入我们
+        </Link>
       </div>
     </div>
 
@@ -89,14 +93,18 @@ const { currentPath } = Astro.props;
             target="_blank"
             rel="noreferrer"
             class="rounded-lg border border-brand-100 bg-white px-3 py-2 text-sm font-medium text-ink-700"
+            icon="external"
+            iconPosition="end"
           >
             GitHub
           </Link>
           <Link
             href="/join/"
-            class="rounded-lg bg-brand-500 px-3 py-2 text-sm font-semibold text-white"
+            variant="rainbowOutline"
+            class="justify-center"
+            icon="join"
           >
-            联系我们
+            加入我们
           </Link>
         </div>
       </div>

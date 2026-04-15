@@ -1,7 +1,7 @@
 export type NavItem = {
   label: string;
   href: string;
-  icon: "home" | "blog" | "news" | "project" | "about" | "join";
+  icon: "home" | "blog" | "news" | "project" | "about";
 };
 
 export type SocialItem = {
@@ -31,7 +31,6 @@ export const siteConfig = {
     { label: "新闻", href: "/news/", icon: "news" },
     { label: "项目", href: "/projects/", icon: "project" },
     { label: "关于", href: "/about/", icon: "about" },
-    { label: "加入我们", href: "/join/", icon: "join" },
   ] satisfies NavItem[],
   socials: [
     {
