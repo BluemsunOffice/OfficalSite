@@ -90,8 +90,9 @@ function compressImage(
               return;
             }
 
+            const baseName = file.name.replace(/\.[^.]+$/, "");
             resolve(
-              new File([blob], file.name, {
+              new File([blob], `${baseName}.jpg`, {
                 type: "image/jpeg",
                 lastModified: Date.now(),
               }),
@@ -116,10 +117,13 @@ function validateForm(
   studentIdLength: number,
 ): string | null {
   if (uploadedImage === "") return "请选择图片";
-  if (!fields.name.trim()) return "请填写姓名";
-  if (fields.name.length < 2) return "姓名长度不少于2";
-  if (!fields.number.trim()) return "请填写学号";
-  if (fields.number.length !== studentIdLength) {
+  const trimmedName = fields.name.trim();
+  if (!trimmedName) return "请填写姓名";
+  if (trimmedName.length < 2) return "姓名长度不少于2";
+  const trimmedNumber = fields.number.trim();
+  if (!trimmedNumber) return "请填写学号";
+  if (!/^\d+$/.test(trimmedNumber)) return "学号只能包含数字";
+  if (trimmedNumber.length !== studentIdLength) {
     return `请填写正确的学号（${studentIdLength}位）`;
   }
   if (!fields.major) return "请选择专业";
@@ -165,7 +169,11 @@ export default function JoinForm({
   }, []);
 
   const updateField = useCallback(
-    (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    (
+      event: ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >,
+    ) => {
       const { name, value } = event.target;
       setFields((prev) => ({ ...prev, [name]: value }));
     },
@@ -174,10 +182,15 @@ export default function JoinForm({
 
   const onFileChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
+      const input = event.target;
+      const file = input.files?.[0];
       if (!file) return;
 
       setFileTip(`已选择文件：${file.name}`);
+
+      const resetInput = () => {
+        input.value = "";
+      };
 
       try {
         const compressedFile = await compressImage(
@@ -204,10 +217,12 @@ export default function JoinForm({
 
         setUploadedImage("");
         setFileTip(DEFAULT_FILE_TIP);
+        resetInput();
         showFailure((data.msg as string) || "上传图片失败");
       } catch {
         setUploadedImage("");
         setFileTip(DEFAULT_FILE_TIP);
+        resetInput();
         showFailure("上传图片失败");
       }
     },
@@ -218,7 +233,11 @@ export default function JoinForm({
     async (event: SyntheticEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      const validationError = validateForm(fields, uploadedImage, studentIdLength);
+      const validationError = validateForm(
+        fields,
+        uploadedImage,
+        studentIdLength,
+      );
       if (validationError) {
         showFailure(validationError);
         return;
@@ -263,7 +282,16 @@ export default function JoinForm({
         showFailure(failureMessage);
       }
     },
-    [endpoint, failureMessage, fields, showFailure, showSuccess, studentIdLength, successMessage, uploadedImage],
+    [
+      endpoint,
+      failureMessage,
+      fields,
+      showFailure,
+      showSuccess,
+      studentIdLength,
+      successMessage,
+      uploadedImage,
+    ],
   );
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 interface ModalDialogProps {
@@ -10,6 +10,7 @@ interface ModalDialogProps {
   showCloseButton?: boolean;
   closeOnEsc?: boolean;
   closeOnOverlay?: boolean;
+  ariaLabel?: string;
   maxWidthClassName?: string;
   overlayClassName?: string;
   panelClassName?: string;
@@ -24,6 +25,7 @@ export default function ModalDialog({
   title,
   children,
   footer,
+  ariaLabel,
   showCloseButton = true,
   closeOnEsc = true,
   closeOnOverlay = true,
@@ -34,6 +36,7 @@ export default function ModalDialog({
   bodyClassName = "p-4",
   footerClassName = "border-t border-brand-100 px-4 py-3",
 }: ModalDialogProps) {
+  const titleId = useId();
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
     null,
   );
@@ -92,13 +95,20 @@ export default function ModalDialog({
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label={typeof title === "string" ? title : undefined}
+        aria-label={
+          ariaLabel ?? (typeof title === "string" ? title : undefined)
+        }
+        aria-labelledby={
+          !ariaLabel && title && typeof title !== "string" ? titleId : undefined
+        }
       >
         {(title || showCloseButton) && (
           <div
             className={`flex items-center justify-between ${headerClassName}`}
           >
-            <div className="text-sm font-semibold text-ink-900">{title}</div>
+            <div id={titleId} className="text-sm font-semibold text-ink-900">
+              {title}
+            </div>
             {showCloseButton && (
               <button
                 className="rounded-lg p-1.5 text-ink-500 transition hover:bg-brand-50 hover:text-ink-900"

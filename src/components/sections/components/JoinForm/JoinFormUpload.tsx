@@ -26,7 +26,7 @@ export default function JoinFormUpload({
           id="file-upload"
           name="photo"
           type="file"
-          accept="image/png, image/jpeg, image/gif, image/webp, image/svg+xml"
+          accept="image/jpeg, image/png, image/webp"
           className="hidden"
           onChange={onFileChange}
         />
