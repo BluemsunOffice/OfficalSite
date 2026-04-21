@@ -8,7 +8,7 @@ import {
   Search,
   X,
 } from "lucide-react";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type LayoutMode = "1" | "2" | "4";
@@ -109,8 +109,11 @@ export default function ContentLayoutGrid({
   const [tagMenuPosition, setTagMenuPosition] = useState<TagMenuPosition | null>(
     null,
   );
+  const tagMenuId = useId();
   const tagMenuRef = useRef<HTMLDivElement | null>(null);
   const tagButtonRef = useRef<HTMLButtonElement | null>(null);
+  const tagOptionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const shouldRestoreTagButtonFocusRef = useRef(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(storageKey);
@@ -125,6 +128,16 @@ export default function ContentLayoutGrid({
 
   useEffect(() => {
     if (!isTagMenuOpen) {
+      tagOptionRefs.current = [];
+      setTagMenuPosition(null);
+
+      if (shouldRestoreTagButtonFocusRef.current) {
+        shouldRestoreTagButtonFocusRef.current = false;
+        window.requestAnimationFrame(() => {
+          tagButtonRef.current?.focus();
+        });
+      }
+
       return;
     }
 
@@ -135,13 +148,18 @@ export default function ContentLayoutGrid({
       }
 
       setTagMenuPosition({
-        top: rect.bottom + window.scrollY + 8,
-        left: rect.left + window.scrollX,
+        top: rect.bottom + 8,
+        left: rect.left,
         width: rect.width,
       });
     };
 
     updateTagMenuPosition();
+    window.requestAnimationFrame(() => {
+      const focusTarget =
+        tagOptionRefs.current.find(Boolean) ?? tagMenuRef.current;
+      focusTarget?.focus();
+    });
 
     const handlePointerDown = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -153,11 +171,23 @@ export default function ContentLayoutGrid({
       }
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      event.preventDefault();
+      shouldRestoreTagButtonFocusRef.current = true;
+      setIsTagMenuOpen(false);
+    };
+
     document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", updateTagMenuPosition);
     window.addEventListener("scroll", updateTagMenuPosition, true);
     return () => {
       document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", updateTagMenuPosition);
       window.removeEventListener("scroll", updateTagMenuPosition, true);
     };
@@ -248,7 +278,16 @@ export default function ContentLayoutGrid({
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <button
             type="button"
-            onClick={() => setIsFilterOpen((current) => !current)}
+            onClick={() =>
+              setIsFilterOpen((current) => {
+                const next = !current;
+                if (!next) {
+                  setIsTagMenuOpen(false);
+                  setTagMenuPosition(null);
+                }
+                return next;
+              })
+            }
             aria-expanded={isFilterOpen}
             className={[
               "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-white text-ink-600 shadow-[0_4px_14px_rgb(15_23_42/8%)] transition",
@@ -317,6 +356,8 @@ export default function ContentLayoutGrid({
                       ref={tagButtonRef}
                       type="button"
                       onClick={() => setIsTagMenuOpen((current) => !current)}
+                      aria-haspopup="listbox"
+                      aria-controls={tagMenuId}
                       aria-expanded={isTagMenuOpen}
                       className="inline-flex h-10 w-full items-center justify-between rounded-xl border border-brand-100 bg-white px-3 text-sm text-ink-900 outline-none transition hover:border-brand-300 focus:border-brand-300 focus:ring-2 focus:ring-brand-100"
                     >
@@ -332,8 +373,13 @@ export default function ContentLayoutGrid({
                     {isTagMenuOpen && tagMenuPosition
                       ? createPortal(
                           <div
+                            id={tagMenuId}
                             ref={tagMenuRef}
                             className="fixed z-[60] rounded-2xl border border-brand-100 bg-white p-2 shadow-[0_18px_44px_rgb(15_23_42/14%)]"
+                            role="listbox"
+                            aria-label="标签筛选"
+                            aria-multiselectable="true"
+                            tabIndex={-1}
                             style={{
                               top: `${tagMenuPosition.top}px`,
                               left: `${tagMenuPosition.left}px`,
@@ -355,11 +401,14 @@ export default function ContentLayoutGrid({
                           ) : null}
                         </div>
                         <div className="max-h-64 overflow-y-auto">
-                          {tags.map(({ tag, count }) => {
+                          {tags.map(({ tag, count }, index) => {
                             const active = selectedTags.includes(tag);
                             return (
                               <button
                                 key={tag}
+                                ref={(node) => {
+                                  tagOptionRefs.current[index] = node;
+                                }}
                                 type="button"
                                 onClick={() => {
                                   setSelectedTags((current) =>
@@ -368,6 +417,8 @@ export default function ContentLayoutGrid({
                                       : [...current, tag],
                                   );
                                 }}
+                                role="option"
+                                aria-selected={active}
                                 className={[
                                   "flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm transition",
                                   active
