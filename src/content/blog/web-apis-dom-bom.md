@@ -68,7 +68,7 @@ element.getElementsByTagName('标签名');
 ### 通过 HTML5 新增的方法获取
 
 ```javascript
-document.getElementsByClassName(’类名‘)；// 根据类名返回元素对象集合
+document.getElementsByClassName('类名'); // 根据类名返回元素对象集合
 document.querySelector('选择器');        // 根据指定选择器返回第一个元素对象
 document.querySelectorAll('选择器');     // 根据指定选择器返回
 ```

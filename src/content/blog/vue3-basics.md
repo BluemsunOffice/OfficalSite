@@ -21,13 +21,13 @@ description: "Vue 3：新一代前端框架，性能提升，组合式API，更�
 
 打开官网，点击快速上手，在 html 文件中引入 vue.global.js 文件
 
-```
+```html
 <script src="./vue.global.js"></script>
 ```
 
 在 body 标签里:首先是容器，在 script 标签里用 Vue.createApp 方法，用 setup 配置项存放数据和方法，setup 里需要返回值。在 Vue.createApp 后面将内容挂载在容器内用 mount("#id")
 
-```
+```html
 <div id="id">
     <h2>{{msg}}</h2>
 </div>
@@ -44,7 +44,7 @@ description: "Vue 3：新一代前端框架，性能提升，组合式API，更�
 
 如果想创建一个复杂的数据类型，可以使用 reactive,并且将其返回 return
 
-```
+```javascript
 setup() {
     const web = Vue.reactive({
         title: "你好"
@@ -58,7 +58,7 @@ setup() {
 
 简写：不写 Vue，可以使用解构赋值
 
-```
+```javascript
 const { createApp, reactive } = Vue
 ```
 
@@ -66,7 +66,7 @@ const { createApp, reactive } = Vue
 
 同样，在官网找到 vue.esm-browser.js 文件并引入
 
-```
+```javascript
 import { createApp, reactive } from './vue.esm-browser.js'
 ```
 
@@ -78,20 +78,20 @@ import { createApp, reactive } from './vue.esm-browser.js'
 
 引入
 
-```
+```javascript
 import { createApp, reactive, ref } from './vue.esm-browser.js'
 ```
 
 定义和修改（setup 里）
 
-```
+```javascript
 const num = ref(11)
 num.value = 122
 ```
 
 返回
 
-```
+```javascript
 return {
      num
 }
@@ -103,13 +103,13 @@ return {
 
 在标签中用 v-on 或者@绑定事件
 
-```
+```html
  <button @click="edit">按钮</button>
 ```
 
 在 setup 里写函数
 
-```
+```javascript
 const edit = () => {
                     web.url = "22222"
                 }
@@ -121,7 +121,7 @@ const edit = () => {
 
 在标签里用 v-show
 
-```
+```html
 <h2 v-show="web.show">{{web.url}}</h2>
 ```
 
@@ -133,7 +133,7 @@ const edit = () => {
 
 可以对 value，src，class 进行绑定，简写形式是：value
 
-```
+```html
 <div class="id">
     <!-- value -->
     <input type="text" :value="web.url1">
@@ -165,7 +165,7 @@ const edit = () => {
 
 在使用过程中，尽量加上:key="value.id"
 
-```
+```html
 <div class="id">
     <ul>
         <li v-for="value in data.number">
@@ -218,7 +218,7 @@ const edit = () => {
 
 在 setup 里的数据里，写一个复杂数据类型存储
 
-```
+```html
 <div class="id">
     <input type="text" v-model="data.text">
     <input type="radio" v-model="data.radio" value="1">选项1
@@ -259,7 +259,7 @@ const edit = () => {
 
 .trim 是去掉首尾空格
 
-```
+```html
 <input type="text" v-model.lazy="data.text">
 <input type="text" v-model.number="data.text">
 <input type="text" v-model.trim="data.text">
@@ -267,14 +267,14 @@ const edit = () => {
 
 ### 2.9v-text 和 v-html
 
-```
+```html
 <h2 v-text="data.title"></h2>
 <h2 v-html="data.html"></h2>
 ```
 
 在 setup 里
 
-```
+```javascript
 const data = reactive({
     title: "阿衡",
     html: "<i style='color:red;'>www.baidu.com</i>"
@@ -287,7 +287,7 @@ const data = reactive({
 
 在利用属性将计算属性挂载上去，用 computed(()=>{}）箭头函数的形式
 
-```
+```html
 <div class="id">
     <h2>{{add}}</h2>
 </div>
@@ -316,13 +316,13 @@ const data = reactive({
 
 导入 watch
 
-```
+```javascript
 import { createApp, reactive, watch } from './vue.esm-browser.js'
 ```
 
 监听某个数据
 
-```
+```javascript
 const data = reactive({
     year: "2023"
 })
@@ -333,7 +333,7 @@ watch(data, (newValue, oldValue) => {
 
 监听某个对象的属性（范围更小）
 
-```
+```javascript
 const data = reactive({
     year: "2023"
 })
@@ -342,8 +342,8 @@ watch(() => data.year, (newValue, oldValue) => {
 })
 ```
 
-```
 综合：
+```javascript
 import { createApp, reactive, watch } from './vue.esm-browser.js'
 createApp({
     setup() {
@@ -367,7 +367,7 @@ createApp({
 
 同样还是先引入 watchEffect，在 setup 里直接使用 watchEffect 即可
 
-```
+```javascript
 import { createApp, reactive, watchEffect } from './vue.esm-browser.js'
 createApp({
     setup() {
@@ -392,31 +392,31 @@ createApp({
 
 创建
 
-```
+```bash
 npm create vite@latest
 ```
 
 命名项目名
 
-```
+```bash
 Project name: ... demo
 ```
 
 进入项目文件夹
 
-```
+```bash
 cd demo
 ```
 
 安装
 
-```
+```bash
 npm install
 ```
 
 运行
 
-```
+```bash
  npm run dev
 ```
 
@@ -442,7 +442,7 @@ npm install
 
 将 html 结构直接放在 template 标签里即可
 
-```
+```vue
 <template>
  <div class="id">
         <h2>{{web.url}}</h2>
@@ -482,7 +482,7 @@ npm install
 
 如果是一个对象，则利用 v-bind 绑定数据，在 script 里创建对象，推荐 reactive
 
-```
+```vue
 <template>
  <div class="id">
   <Header propsName="阿衡"/>
@@ -511,7 +511,7 @@ const propsWeb=reactive({
 
 如果是对象，要对对象的那个属性进行限制
 
-```
+```vue
 <template>
 <div>header</div>
 </template>
@@ -529,7 +529,7 @@ console.log(propsName);
 
 ```
 
-```
+```vue
 <template>
 <div>footer</div>
 </template>
@@ -561,7 +561,7 @@ console.log(propsWeb)
 
 ps：在可以通过自定义事件来决定传递数据的时机
 
-```
+```vue
 <template>
 <div>header
     <button @click="add">按钮</button>
@@ -587,7 +587,7 @@ const add=()=>{
 
 在自定义函数中，用箭头函数的参数接收传递过来的数据
 
-```4.
+```vue
 <template>
  <div class="id">
   <Header @getWeb="emitsgetWeb" @getUrl="emitsgetUrl"/>
@@ -626,7 +626,7 @@ const url=ref(1111)
 
 传递数据的一方需要引入 provide，并定义好需要传递的数据，再通过 provide("传递名",传递的数据)
 
-```
+```vue
 <template>
  <div class="id">
   <Header/>
@@ -657,7 +657,7 @@ provide("provideFucurlAdd",urlAdd)
 
 先引入 inject，再用 inject("传递名")来获取数据
 
-```
+```vue
 <template>
 <div>
     <Nav/>
@@ -690,7 +690,7 @@ console.log(urlAdd);
 
 1.匿名插槽
 
-```
+```vue
 <template>
  <div class="id">
   <Header><a href="www.baidu.com">百度</a></Header>
@@ -702,7 +702,7 @@ console.log(urlAdd);
 
 需要用一个 template 标签包裹，并且用 v-slot:或者#取名
 
-```
+```vue
 <template>
  <div class="id">
   <Header><a href="www.baidu.com">百度</a></Header>
@@ -722,7 +722,7 @@ console.log(urlAdd);
 
 1.匿名插槽
 
-```
+```vue
 <template>
 <div>
     header
@@ -732,7 +732,7 @@ console.log(urlAdd);
 
 2.具名插槽（在 slot 标签属性指明插槽名即可）
 
-```
+```vue
 <template>
 <div>footer
     <slot name="baidu"/>
@@ -750,7 +750,7 @@ console.log(urlAdd);
 
 在属性里加入要传递的数据
 
-```
+```vue
 <template>
 <div>footer
     <slot name="baidu" title="阿衡" age="20"/>
@@ -762,7 +762,7 @@ console.log(urlAdd);
 
 1.在取名处用=“数据名”的形式，可以通过{{数据名.子组件定义的属性}}来进行使用
 
-```
+```vue
 <template>
  <div class="id">
   <Footer>
@@ -778,7 +778,7 @@ console.log(urlAdd);
 
 2.还可以通过解构的方式，#插槽名={子组件定义的属性}，在使用时，可以直接{{子组件定义的属性}}
 
-```
+```vue
 <template>
  <div class="id">
   <Footer>
@@ -800,7 +800,7 @@ console.log(urlAdd);
 
 首先引入 toRefs，再利用解构赋值和 toRefs 方法，将响应式数据（对象）的全部属性转化
 
-```
+```vue
 <script setup>
 import {reactive,toRefs} from 'vue'
 let web=reactive({
@@ -816,7 +816,7 @@ console.log(url)
 
 首先引入 toRef，再利用 toRef 方法，toRef(需要转换的响应式对象，“需要转换的属性”)
 
-```
+```vue
 <script setup>
 import {reactive,toRef} from 'vue'
 let web=reactive({
@@ -836,7 +836,7 @@ pinia 是一个轻量级的状态管理库，可以全局状态管理，简化�
 
 进入你创建项目的文件夹中，利用管理员身份打开终端，输入命令行
 
-```
+```bash
 npm install pinia
 ```
 
@@ -846,7 +846,7 @@ npm install pinia
 
 ps：需要更改一下 app 创建实例的方式
 
-```
+```vue
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
@@ -871,7 +871,7 @@ store 是用来集中存储和管理组件之间共享状态的仓库
 
 最后将仓库导出，用 export ，其中仓库名是有规范的，use+唯一标识符+Store
 
-```
+```javascript
 import { ref, reactive } from "vue"
 import { defineStore } from "pinia"
 
@@ -898,7 +898,7 @@ export const useWebStore = defineStore("web", () => {
 
 再创建仓库实例即可
 
-```
+```vue
 <template>
 <div id="app">
 
@@ -922,13 +922,13 @@ console.log(webStore.userAdd)
 
 在全局安装 pinia-plugin-persistedstate 插件
 
-```
+```bash
 npm i pinia-plugin-persistedstate
 ```
 
 在 main.js 文件中，引入插件，并将插件注册到 pinia 中
 
-```
+```javascript
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
@@ -945,7 +945,7 @@ app.mount('#app')
 
 将仓库变为持久化仓库，打开仓库文件 setup 函数后面添加一个配置项 persist: true
 
-```
+```javascript
 import { ref, reactive } from "vue"
 import { defineStore } from "pinia"
 

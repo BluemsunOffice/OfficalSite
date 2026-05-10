@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import shikiToolbar from './src/plugins/shiki-toolbar.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,9 +15,10 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       themes: {
-        light: "github-light",
-        dark: "github-dark",
+        light: "material-theme-lighter",
+        dark: "material-theme-darker",
       },
+      transformers: [shikiToolbar()]
     },
   },
 });
